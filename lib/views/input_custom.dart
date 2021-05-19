@@ -9,7 +9,7 @@ class InputCustom extends StatelessWidget {
   final bool autofocus;
   final TextInputType type;
 
-  InputCustom(
+  const InputCustom(
       {@required this.controller,
         @required this.hint,
         this.obscure = false,
@@ -20,14 +20,14 @@ class InputCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: this.controller,
-      obscureText: this.obscure,
-      keyboardType: this.type,
-      autofocus: this.autofocus,
+      controller: controller,
+      obscureText: obscure,
+      keyboardType: type,
+      autofocus: autofocus,
       style: const TextStyle(fontSize: 20),
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-        hintText: this.hint,
+        hintText: hint,
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(

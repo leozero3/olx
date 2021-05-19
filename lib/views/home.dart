@@ -7,9 +7,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  TextEditingController _controllerEmail =
+  final TextEditingController _controllerEmail =
       TextEditingController(text: 'leo@leo.com');
-  TextEditingController _controllerSenha =
+  final TextEditingController _controllerSenha =
       TextEditingController(text: 'leoleo');
 
   bool _cadastrar = false;
