@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olx/models/usuario.dart';
 import 'package:olx/views/input_custom.dart';
 
 class Home extends StatefulWidget {
@@ -13,6 +14,47 @@ class _HomeState extends State<Home> {
       TextEditingController(text: 'leoleo');
 
   bool _cadastrar = false;
+  String _mensagemErro = '';
+
+  _cadastrarUsuario(Usuario usuario){
+
+  }
+  _logarUsuario(Usuario usuario){
+
+  }
+  _validarCampos() {
+    String email = _controllerEmail.text;
+    String senha = _controllerSenha.text;
+
+
+    if (email.isNotEmpty && email.contains('@')) {
+      if (senha.isNotEmpty && senha.length > 6) {
+
+        Usuario usuario = Usuario();
+        usuario.email = email;
+        usuario.senha = senha;
+
+        if(_cadastrar){
+
+          _cadastrarUsuario(usuario);
+
+        }else{
+
+          _logarUsuario(usuario);
+        }
+
+
+      } else {
+        setState(() {
+          _mensagemErro = 'Minimo de 6 caracteres';
+        });
+      }
+    } else {
+      setState(() {
+        _mensagemErro = 'Preecha o E-mail válido';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +111,17 @@ class _HomeState extends State<Home> {
                   'Entrar',
                   style: TextStyle(fontSize: 20),
                 ),
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(
+                  _mensagemErro,
+                  style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
+                ),
+              ),
             ],
           ),
         ),
