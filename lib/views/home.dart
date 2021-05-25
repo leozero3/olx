@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:olx/models/usuario.dart';
 import 'package:olx/views/input_custom.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -15,20 +16,40 @@ class _HomeState extends State<Home> {
 
   bool _cadastrar = false;
   String _mensagemErro = '';
+  String _textoBotao = 'Entrar';
+
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   _cadastrarUsuario(Usuario usuario){
 
+    auth.createUserWithEmailAndPassword(
+        email: usuario.email,
+        password: usuario.senha,
+    ).then((firebaseUser) {
+
+
+
+    });
   }
+
   _logarUsuario(Usuario usuario){
 
+    auth.signInWithEmailAndPassword(
+        email: usuario.email,
+        password: usuario.senha,
+    ).then((firebaseUser){
+
+    });
   }
+
+
   _validarCampos() {
     String email = _controllerEmail.text;
     String senha = _controllerSenha.text;
 
 
     if (email.isNotEmpty && email.contains('@')) {
-      if (senha.isNotEmpty && senha.length > 6) {
+      if (senha.isNotEmpty && senha.length >= 6) {
 
         Usuario usuario = Usuario();
         usuario.email = email;
@@ -97,6 +118,11 @@ class _HomeState extends State<Home> {
                     onChanged: (bool valor) {
                       setState(() {
                         _cadastrar = valor;
+                        _textoBotao = 'Entrar';
+                        if (_cadastrar) {
+                          _textoBotao = 'Cadastrar';
+                          
+                        }  
                       });
                     },
                   ),
@@ -106,9 +132,11 @@ class _HomeState extends State<Home> {
               RaisedButton(
                 color: const Color(0xff9c27b0),
                 padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-                onPressed: () {},
-                child: const Text(
-                  'Entrar',
+                onPressed: () {
+                  _validarCampos();
+                },
+                child: Text(
+                  _textoBotao,
                   style: TextStyle(fontSize: 20),
                 ),
               ),

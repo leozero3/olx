@@ -9,9 +9,10 @@ final ThemeData temaPadrao = ThemeData(
 );
 
 
-void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+
+void main() async{
+   WidgetsFlutterBinding.ensureInitialized();
+   await Firebase.initializeApp();
 
   runApp(MaterialApp(
     title: 'OLX',
