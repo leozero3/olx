@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:olx/views/anuncios.dart';
 import 'package:olx/views/login.dart';
+import 'package:olx/views/meus_anuncios.dart';
+import 'package:olx/views/novo_anuncio.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -15,6 +17,14 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => Login(),
         );
+      case '/meus-anuncios':
+        return MaterialPageRoute(
+          builder: (_) => MeusAnuncios(),
+        );
+      case '/novo-anuncio':
+        return MaterialPageRoute(
+          builder: (_) => NovoAnuncio(),
+        );
       default:
         _erroRota();
     }
@@ -25,9 +35,9 @@ class RouteGenerator {
       builder: (_) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('Tela não encontrada!'),
+            title: const Text('Tela não encontrada!'),
           ),
-          body: Center(
+          body: const Center(
             child: Text('Tela não encontrada!'),
           ),
         );

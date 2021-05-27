@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:olx/models/usuario.dart';
-import 'package:olx/views/input_custom.dart';
+import 'package:olx/views/widgets/botao_custom.dart';
+import 'package:olx/views/widgets/input_custom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
@@ -20,53 +21,43 @@ class _LoginState extends State<Login> {
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  _cadastrarUsuario(Usuario usuario){
-
-    auth.createUserWithEmailAndPassword(
-        email: usuario.email,
-        password: usuario.senha,
-    ).then((firebaseUser) {
+  _cadastrarUsuario(Usuario usuario) {
+    auth
+        .createUserWithEmailAndPassword(
+      email: usuario.email,
+      password: usuario.senha,
+    )
+        .then((firebaseUser) {
       Navigator.pushReplacementNamed(context, '/');
-
-
-
     });
   }
 
-  _logarUsuario(Usuario usuario){
-
-    auth.signInWithEmailAndPassword(
-        email: usuario.email,
-        password: usuario.senha,
-    ).then((firebaseUser){
+  _logarUsuario(Usuario usuario) {
+    auth
+        .signInWithEmailAndPassword(
+      email: usuario.email,
+      password: usuario.senha,
+    )
+        .then((firebaseUser) {
       Navigator.pushReplacementNamed(context, '/');
-
     });
   }
-
 
   _validarCampos() {
     String email = _controllerEmail.text;
     String senha = _controllerSenha.text;
 
-
     if (email.isNotEmpty && email.contains('@')) {
       if (senha.isNotEmpty && senha.length >= 6) {
-
         Usuario usuario = Usuario();
         usuario.email = email;
         usuario.senha = senha;
 
-        if(_cadastrar){
-
+        if (_cadastrar) {
           _cadastrarUsuario(usuario);
-
-        }else{
-
+        } else {
           _logarUsuario(usuario);
         }
-
-
       } else {
         setState(() {
           _mensagemErro = 'Minimo de 6 caracteres';
@@ -123,24 +114,18 @@ class _LoginState extends State<Login> {
                         _textoBotao = 'Entrar';
                         if (_cadastrar) {
                           _textoBotao = 'Cadastrar';
-                          
-                        }  
+                        }
                       });
                     },
                   ),
                   const Text('Cadastrar'),
                 ],
               ),
-              RaisedButton(
-                color: const Color(0xff9c27b0),
-                padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+              BotaoCustom(
+                texto: _textoBotao,
                 onPressed: () {
                   _validarCampos();
                 },
-                child: Text(
-                  _textoBotao,
-                  style: TextStyle(fontSize: 20),
-                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
