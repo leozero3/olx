@@ -4,17 +4,19 @@ import 'package:olx/main.dart';
 class BotaoCustom extends StatelessWidget {
   final String texto;
   final Color corTexto;
-  final color
   final VoidCallback onPressed;
 
-  BotaoCustom(
-      {@required this.texto, this.corTexto = Colors.white, this.corBotao = color: temaPadrao.primaryColor,  this.onPressed});
+  const BotaoCustom(
+      {@required this.texto, this.corTexto = Colors.white, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
 
 
     return RaisedButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6),
+      ),
       textColor: corTexto,
       color: temaPadrao.primaryColor,
       padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
