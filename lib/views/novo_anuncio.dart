@@ -44,15 +44,26 @@ class NovoAnuncioState extends State<NovoAnuncio> {
   }
 
   void _carregarItensDropdown() {
+    _listaItensDropCategorias
+        .add(DropdownMenuItem(value: 'auto', child: Text('Automovel')));
+    _listaItensDropCategorias
+        .add(DropdownMenuItem(value: 'imovel', child: Text('Imovel')));
+    _listaItensDropCategorias
+        .add(DropdownMenuItem(value: 'moda', child: Text('Moda')));
+    _listaItensDropCategorias
+        .add(DropdownMenuItem(value: 'esportes', child: Text('Esportes')));
+    _listaItensDropCategorias
+        .add(DropdownMenuItem(value: 'eletro', child: Text('Eletro')));
+    _listaItensDropCategorias
+        .add(DropdownMenuItem(value: 'informaica', child: Text('Informaica')));
 
-    for(var estado in Estados.listaEstadosSigla){
-      _listaItensDropEstados.add(
-        DropdownMenuItem( value: estado,child: Text(estado),)
-      );
+    for (var estado in Estados.listaEstadosSigla) {
+      _listaItensDropEstados.add(DropdownMenuItem(
+        value: estado,
+        child: Text(estado),
+      ));
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,20 +92,45 @@ class NovoAnuncioState extends State<NovoAnuncio> {
                             fontSize: 20,
                           ),
                           items: _listaItensDropEstados,
-                          validator: (valor){
-                            return Validador().add(v)
+                          validator: (valor) {
+                            return Validador()
+                                .add(Validar.OBRIGATORIO,
+                                    msg: 'Campo Obrigatorio')
+                                .valido(valor.toString());
                           },
-                          onChanged: (valor){
+                          onChanged: (valor) {
                             setState(() {
                               _itemSelecionadoEstado = valor.toString();
                             });
-
                           },
-
                         ),
                       ),
                     ),
-                    Text('Categoria'),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: DropdownButtonFormField(
+                          value: _itemSelecionadoEstado,
+                          hint: Text('Categoria'),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
+                          items: _listaItensDropCategorias,
+                          validator: (valor) {
+                            return Validador()
+                                .add(Validar.OBRIGATORIO,
+                                    msg: 'Campo Obrigatorio')
+                                .valido(valor.toString());
+                          },
+                          onChanged: (valor) {
+                            setState(() {
+                              _itemSelecionadoCategoria = valor.toString();
+                            });
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Text('Caixas de Textos'),
