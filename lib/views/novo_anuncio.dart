@@ -3,6 +3,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:olx/models/anuncio.dart';
 import 'package:olx/views/widgets/botao_custom.dart';
 import 'package:olx/views/widgets/input_custom.dart';
 import 'package:validadores/Validador.dart';
@@ -15,9 +16,12 @@ class NovoAnuncio extends StatefulWidget {
 }
 
 class NovoAnuncioState extends State<NovoAnuncio> {
+
   final List<File> _listaimagem = [];
   final ImagePicker _picker = ImagePicker();
   File imagemSelecionada;
+
+  Anuncio _anuncio;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -42,6 +46,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
   void initState() {
     super.initState();
     _carregarItensDropdown();
+    _anuncio = Anuncio();
   }
 
   void _carregarItensDropdown() {
@@ -58,6 +63,10 @@ class NovoAnuncioState extends State<NovoAnuncio> {
         child: Text(estado),
       ));
     }
+  }
+
+  _salvarAnuncio(){
+
   }
 
   @override
@@ -83,7 +92,13 @@ class NovoAnuncioState extends State<NovoAnuncio> {
                 BotaoCustom(
                   texto: 'Cadastrar Anuncio',
                   onPressed: () {
-                    if (_formKey.currentState.validate()) {}
+                    if (_formKey.currentState.validate()) {
+
+                      //salvar campos
+                      _formKey.currentState.save();
+
+                      _salvarAnuncio();
+                    }
                   },
                 ),
               ],
@@ -99,6 +114,9 @@ class NovoAnuncioState extends State<NovoAnuncio> {
       padding: const EdgeInsets.only(bottom: 15, top: 15),
       child: InputCustom(
         hint: 'Titulo',
+        onSaved: (titulo){
+          _anuncio.titulo = titulo;
+        },
         validator: (valor) {
           return Validador().add(Validar.OBRIGATORIO, msg: 'Campo obrigatório').valido(valor);
         },
@@ -111,6 +129,9 @@ class NovoAnuncioState extends State<NovoAnuncio> {
       padding: const EdgeInsets.only(bottom: 15, top: 15),
       child: InputCustom(
         hint: 'Preço',
+        onSaved: (preco){
+          _anuncio.preco = preco;
+        },
         type: TextInputType.number,
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
@@ -128,6 +149,9 @@ class NovoAnuncioState extends State<NovoAnuncio> {
       padding: const EdgeInsets.only(bottom: 15, top: 15),
       child: InputCustom(
         hint: 'Telefone',
+        onSaved: (telefone){
+          _anuncio.telefone = telefone;
+        },
         type: TextInputType.phone,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly, TelefoneInputFormatter()],
         validator: (valor) {
@@ -143,6 +167,9 @@ class NovoAnuncioState extends State<NovoAnuncio> {
       child: InputCustom(
         hint: 'Descrição',
         maxLines: null,
+        onSaved: (descricao){
+          _anuncio.descricao = descricao;
+        },
         validator: (valor) {
           return Validador()
               .add(Validar.OBRIGATORIO, msg: 'Campo obrigatório')
@@ -162,6 +189,9 @@ class NovoAnuncioState extends State<NovoAnuncio> {
             child: DropdownButtonFormField(
               value: _itemSelecionadoEstado,
               hint: const Text('Estados'),
+              onSaved: (estado){
+                _anuncio.estado = estado;
+              },
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
@@ -185,6 +215,9 @@ class NovoAnuncioState extends State<NovoAnuncio> {
             child: DropdownButtonFormField(
               value: _itemSelecionadoCategoria,
               hint: const Text('Categoria'),
+              onSaved: (categoria){
+                _anuncio.categoria = categoria;
+              },
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,

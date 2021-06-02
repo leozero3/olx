@@ -12,6 +12,7 @@ class InputCustom extends StatelessWidget {
   final List<TextInputFormatter> inputFormatters;
   final int maxLines;
   final String Function(String) validator;
+  final String Function(String) onSaved;
 
   const InputCustom(
       {@required this.controller,
@@ -21,8 +22,8 @@ class InputCustom extends StatelessWidget {
         this.type = TextInputType.text,
         this.inputFormatters,
         this.maxLines,
-        this.validator
-
+        this.validator,
+        this.onSaved
       });
 
 
@@ -36,6 +37,7 @@ class InputCustom extends StatelessWidget {
       maxLines: maxLines,
       validator: validator,
       autofocus: autofocus,
+      onSaved: onSaved,
       style: const TextStyle(fontSize: 20),
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
