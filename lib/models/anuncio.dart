@@ -21,6 +21,20 @@ class Anuncio{
     fotos = [];  //inicializa o anuncio com uma lista vazia de foto
   }
 
+  Map<String, dynamic> toMap(){
+    Map<String, dynamic> map = {
+    'id' : id,
+    'estado' : estado,
+    'categoria' : categoria,
+    'titulo' : titulo,
+    'preco' : preco,
+    'telefone' : telefone,
+    'descricao' : descricao,
+    'fotos' : fotos,
+    };
+    return map;
+  }
+
   List<String> get fotos => _fotos;
 
   set fotos(List<String> value) {

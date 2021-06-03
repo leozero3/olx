@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +74,24 @@ class NovoAnuncioState extends State<NovoAnuncio> {
     //upload imagens
     await _uploadimagens();
     print('lista de imagens::::: ${_anuncio.fotos.toString()}');
+    
+    //salvar anuncio
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User usuarioLogado = await auth.currentUser;
+
+    String idUsuarioLogado = usuarioLogado.uid;
+
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db.collection('meus_anuncios')
+        .doc(idUsuarioLogado)
+        .collection('anuncios')
+        .doc(_anuncio.id)
+        .set(_anuncio.toMap()).then((_){
+          
+          Navigator.pushReplacementNamed(context, '/meus-anuncios');
+    });
+    
+    
   }
 
   Future _uploadimagens() async {
