@@ -1,5 +1,7 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Anuncio{
 
   String _id;
@@ -11,7 +13,13 @@ class Anuncio{
   String _descricao;
   List<String> _fotos;
 
-  Anuncio();
+  Anuncio(){
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    CollectionReference anuncios = db.collection('meus_anuncios');
+    this.id = anuncios.doc().id;
+
+    fotos = [];  //inicializa o anuncio com uma lista vazia de foto
+  }
 
   List<String> get fotos => _fotos;
 

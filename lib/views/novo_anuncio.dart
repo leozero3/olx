@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,7 +18,6 @@ class NovoAnuncio extends StatefulWidget {
 }
 
 class NovoAnuncioState extends State<NovoAnuncio> {
-
   final List<File> _listaimagem = [];
   final ImagePicker _picker = ImagePicker();
   File imagemSelecionada;
@@ -53,9 +54,11 @@ class NovoAnuncioState extends State<NovoAnuncio> {
     _listaItensDropCategorias.add(const DropdownMenuItem(value: 'auto', child: Text('Automovel')));
     _listaItensDropCategorias.add(const DropdownMenuItem(value: 'imovel', child: Text('Imovel')));
     _listaItensDropCategorias.add(const DropdownMenuItem(value: 'moda', child: Text('Moda')));
-    _listaItensDropCategorias.add(const DropdownMenuItem(value: 'esportes', child: Text('Esportes')));
+    _listaItensDropCategorias
+        .add(const DropdownMenuItem(value: 'esportes', child: Text('Esportes')));
     _listaItensDropCategorias.add(const DropdownMenuItem(value: 'eletro', child: Text('Eletro')));
-    _listaItensDropCategorias.add(const DropdownMenuItem(value: 'informaica', child: Text('Informaica')));
+    _listaItensDropCategorias
+        .add(const DropdownMenuItem(value: 'informaica', child: Text('Informaica')));
 
     for (final estado in Estados.listaEstadosSigla) {
       _listaItensDropEstados.add(DropdownMenuItem(
@@ -65,8 +68,36 @@ class NovoAnuncioState extends State<NovoAnuncio> {
     }
   }
 
-  _salvarAnuncio(){
+  _salvarAnuncio() async {
+    //upload imagens
+    await _uploadimagens();
+    print('lista de imagens::::: ${_anuncio.fotos.toString()}');
+  }
 
+  Future _uploadimagens() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference pastaRaiz = storage.ref();
+
+    for (var imagem in _listaimagem) {
+      String nomeImagem = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference arquivo = pastaRaiz.child('meus_anuncios').child(_anuncio.id).child(nomeImagem);
+
+      UploadTask uploadTask = arquivo.putFile(imagem);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      // uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) async {
+      //   try {
+      //     await uploadTask;
+      //     print('Upload complete.');
+      //   } on FirebaseException catch (e) {
+      //     if (e.code == 'permission-denied') {
+      //       print('User does not have permission to upload to this reference.');
+      //     }
+      //   }
+      // });
+
+      String url = await taskSnapshot.ref.getDownloadURL();
+      _anuncio.fotos.add(url);
+    }
   }
 
   @override
@@ -86,14 +117,12 @@ class NovoAnuncioState extends State<NovoAnuncio> {
                 dropDown(),
                 tituloAnuncio(),
                 precoAnuncio(),
-                precoAnuncio(),
                 telefoneAnuncio(),
                 descricaoAnuncio(),
                 BotaoCustom(
                   texto: 'Cadastrar Anuncio',
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
-
                       //salvar campos
                       _formKey.currentState.save();
 
@@ -114,7 +143,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
       padding: const EdgeInsets.only(bottom: 15, top: 15),
       child: InputCustom(
         hint: 'Titulo',
-        onSaved: (titulo){
+        onSaved: (titulo) {
           _anuncio.titulo = titulo;
         },
         validator: (valor) {
@@ -129,7 +158,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
       padding: const EdgeInsets.only(bottom: 15, top: 15),
       child: InputCustom(
         hint: 'Preço',
-        onSaved: (preco){
+        onSaved: (preco) {
           _anuncio.preco = preco;
         },
         type: TextInputType.number,
@@ -149,7 +178,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
       padding: const EdgeInsets.only(bottom: 15, top: 15),
       child: InputCustom(
         hint: 'Telefone',
-        onSaved: (telefone){
+        onSaved: (telefone) {
           _anuncio.telefone = telefone;
         },
         type: TextInputType.phone,
@@ -167,7 +196,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
       child: InputCustom(
         hint: 'Descrição',
         maxLines: null,
-        onSaved: (descricao){
+        onSaved: (descricao) {
           _anuncio.descricao = descricao;
         },
         validator: (valor) {
@@ -189,7 +218,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
             child: DropdownButtonFormField(
               value: _itemSelecionadoEstado,
               hint: const Text('Estados'),
-              onSaved: (estado){
+              onSaved: (estado) {
                 _anuncio.estado = estado;
               },
               style: const TextStyle(
@@ -198,8 +227,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
               ),
               items: _listaItensDropEstados,
               validator: (valor) {
-                return Validador().add(Validar.OBRIGATORIO, msg: 'Campo obrigatório')
-                    .valido(valor);
+                return Validador().add(Validar.OBRIGATORIO, msg: 'Campo obrigatório').valido(valor);
               },
               onChanged: (valor) {
                 setState(() {
@@ -215,7 +243,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
             child: DropdownButtonFormField(
               value: _itemSelecionadoCategoria,
               hint: const Text('Categoria'),
-              onSaved: (categoria){
+              onSaved: (categoria) {
                 _anuncio.categoria = categoria;
               },
               style: const TextStyle(
@@ -224,8 +252,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
               ),
               items: _listaItensDropCategorias,
               validator: (valor) {
-                return Validador().add(Validar.OBRIGATORIO, msg: 'Campo obrigatório')
-                    .valido(valor);
+                return Validador().add(Validar.OBRIGATORIO, msg: 'Campo obrigatório').valido(valor);
               },
               onChanged: (valor) {
                 setState(() {
