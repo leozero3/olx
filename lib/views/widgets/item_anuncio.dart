@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:olx/models/anuncio.dart';
 
 class ItemAnuncio extends StatelessWidget {
-  const ItemAnuncio({Key key}) : super(key: key);
+  Anuncio anuncio;
+  VoidCallback onTapItem;
+  VoidCallback onPressedRemover;
+
+  ItemAnuncio({@required this.anuncio, this.onTapItem, this.onPressedRemover});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTapItem,
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(12),
@@ -15,9 +20,7 @@ class ItemAnuncio extends StatelessWidget {
               SizedBox(
                 width: 120,
                 height: 120,
-                child: Container(
-                  color: Colors.orange,
-                ),
+                child: Image.network(anuncio.fotos[0], fit: BoxFit.cover,),
               ),
               Expanded(
                 flex: 3,
@@ -30,25 +33,29 @@ class ItemAnuncio extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'sdfs54fsfg4',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        anuncio.titulo,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      Text('RS 5154854'),
+                      Text('R\$ ${anuncio.preco}'),
                     ],
                   ),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: FlatButton(
-                  color: Colors.red,
-                  padding: EdgeInsets.all(10),
-                  onPressed: (){
-
-                  },
-                  child: Icon(Icons.delete, color: Colors.white,),
+              if (onPressedRemover != null)
+                Expanded(
+                  flex: 1,
+                  child: FlatButton(
+                    color: Colors.red,
+                    padding: EdgeInsets.all(10),
+                    onPressed:
+                      onPressedRemover,
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

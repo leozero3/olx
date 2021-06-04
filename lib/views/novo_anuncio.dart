@@ -50,7 +50,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
   void initState() {
     super.initState();
     _carregarItensDropdown();
-    _anuncio = Anuncio();
+    _anuncio = Anuncio.gerarId();
   }
 
   void _carregarItensDropdown() {
@@ -98,8 +98,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
 
     //salvar anuncio
     FirebaseAuth auth = FirebaseAuth.instance;
-    User usuarioLogado = await auth.currentUser;
-
+    User usuarioLogado = await auth.currentUser;  ///recupera id do ususario logado
     String idUsuarioLogado = usuarioLogado.uid;
 
     FirebaseFirestore db = FirebaseFirestore.instance;
