@@ -25,6 +25,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
   File imagemSelecionada;
 
   Anuncio _anuncio;
+  BuildContext _dialogContext;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -70,11 +71,31 @@ class NovoAnuncioState extends State<NovoAnuncio> {
     }
   }
 
+  _abrirDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false, // bloqueio de tela
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 20),
+                Text('Salvando Anuncio...')
+              ],
+            ),
+          );
+        });
+  }
+
   _salvarAnuncio() async {
+    _abrirDialog(_dialogContext);
+
     //upload imagens
     await _uploadimagens();
     print('lista de imagens::::: ${_anuncio.fotos.toString()}');
-    
+
     //salvar anuncio
     FirebaseAuth auth = FirebaseAuth.instance;
     User usuarioLogado = await auth.currentUser;
@@ -82,16 +103,19 @@ class NovoAnuncioState extends State<NovoAnuncio> {
     String idUsuarioLogado = usuarioLogado.uid;
 
     FirebaseFirestore db = FirebaseFirestore.instance;
-    db.collection('meus_anuncios')
+    db
+        .collection('meus_anuncios')
         .doc(idUsuarioLogado)
         .collection('anuncios')
         .doc(_anuncio.id)
-        .set(_anuncio.toMap()).then((_){
-          
-          Navigator.pushReplacementNamed(context, '/meus-anuncios');
+        .set(_anuncio.toMap())
+        .then((_) {
+
+
+      Navigator.pop(_dialogContext); //fecha o dialogContext
+
+      Navigator.pop(context);
     });
-    
-    
   }
 
   Future _uploadimagens() async {
@@ -146,6 +170,10 @@ class NovoAnuncioState extends State<NovoAnuncio> {
                       //salvar campos
                       _formKey.currentState.save();
 
+                      //configura dialogcontext
+                      _dialogContext = context;
+
+                      //salva anuncio
                       _salvarAnuncio();
                     }
                   },
