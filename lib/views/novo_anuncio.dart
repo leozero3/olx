@@ -110,10 +110,16 @@ class NovoAnuncioState extends State<NovoAnuncio> {
         .set(_anuncio.toMap())
         .then((_) {
 
+          db.collection('anuncios')
+          .doc(_anuncio.id)
+          .set(_anuncio.toMap()). then((_) {
 
-      Navigator.pop(_dialogContext); //fecha o dialogContext
+            Navigator.pop(_dialogContext); //fecha o dialogContext
+            Navigator.pop(context);
+          });
 
-      Navigator.pop(context);
+
+
     });
   }
 
