@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:olx/main.dart';
 
 class BotaoCustom extends StatelessWidget {
   final String texto;
@@ -18,7 +17,7 @@ class BotaoCustom extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
       ),
       textColor: corTexto,
-      color: temaPadrao.primaryColor,
+      color: Color(0xff9c27b0),
       padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
       onPressed: onPressed,
 

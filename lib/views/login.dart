@@ -101,6 +101,7 @@ class _LoginState extends State<Login> {
                 hint: 'Senha',
                 obscure: true,
                 type: TextInputType.text,
+                maxLines: 1,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

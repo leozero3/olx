@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:olx/models/anuncio.dart';
+import 'package:olx/util/configuracoes.dart';
 import 'package:olx/views/widgets/botao_custom.dart';
 import 'package:olx/views/widgets/input_custom.dart';
 import 'package:validadores/Validador.dart';
@@ -32,8 +33,8 @@ class NovoAnuncioState extends State<NovoAnuncio> {
   String _itemSelecionadoEstado;
   String _itemSelecionadoCategoria;
 
-  final List<DropdownMenuItem<String>> _listaItensDropEstados = [];
-  final List<DropdownMenuItem<String>> _listaItensDropCategorias = [];
+  List<DropdownMenuItem<String>> _listaItensDropEstados = [];
+  List<DropdownMenuItem<String>> _listaItensDropCategorias = [];
 
   Future _selecionarImagemGaleria() async {
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
@@ -54,21 +55,15 @@ class NovoAnuncioState extends State<NovoAnuncio> {
   }
 
   void _carregarItensDropdown() {
-    _listaItensDropCategorias.add(const DropdownMenuItem(value: 'auto', child: Text('Automovel')));
-    _listaItensDropCategorias.add(const DropdownMenuItem(value: 'imovel', child: Text('Imovel')));
-    _listaItensDropCategorias.add(const DropdownMenuItem(value: 'moda', child: Text('Moda')));
-    _listaItensDropCategorias
-        .add(const DropdownMenuItem(value: 'esportes', child: Text('Esportes')));
-    _listaItensDropCategorias.add(const DropdownMenuItem(value: 'eletro', child: Text('Eletro')));
-    _listaItensDropCategorias
-        .add(const DropdownMenuItem(value: 'informaica', child: Text('Informaica')));
 
-    for (final estado in Estados.listaEstadosSigla) {
-      _listaItensDropEstados.add(DropdownMenuItem(
-        value: estado,
-        child: Text(estado),
-      ));
-    }
+    //CATEGORIAS
+
+    _listaItensDropCategorias = Configuracoes.getCategorias();
+
+
+    //ESTADOS
+
+    _listaItensDropEstados = Configuracoes.getEstados();
   }
 
   _abrirDialog(BuildContext context) {
@@ -270,7 +265,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
             padding: const EdgeInsets.all(8.0),
             child: DropdownButtonFormField(
               value: _itemSelecionadoEstado,
-              hint: const Text('Estados'),
+              hint: const Text('Região',style: TextStyle(color: Color(0xff9c27b0))),
               onSaved: (estado) {
                 _anuncio.estado = estado;
               },
@@ -295,7 +290,7 @@ class NovoAnuncioState extends State<NovoAnuncio> {
             padding: const EdgeInsets.all(8.0),
             child: DropdownButtonFormField(
               value: _itemSelecionadoCategoria,
-              hint: const Text('Categoria'),
+              hint: const Text('Categoria',style: TextStyle(color: Color(0xff9c27b0))),
               onSaved: (categoria) {
                 _anuncio.categoria = categoria;
               },
