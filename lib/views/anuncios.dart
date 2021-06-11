@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -107,6 +106,8 @@ class AnunciosState extends State<Anuncios> {
       ),
       body: Container(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               children: [
@@ -115,7 +116,8 @@ class AnunciosState extends State<Anuncios> {
                     child: Center(
                       child: DropdownButton(
                         iconEnabledColor: Color(0xff9c27b0),
-                        hint: const Text('Região', style: TextStyle(color: Color(0xff9c27b0))),
+                        hint: const Text('Região',
+                            style: TextStyle(color: Color(0xff9c27b0))),
                         style: TextStyle(fontSize: 22, color: Colors.black),
                         value: _itemSelecionadoEstado,
                         items: _listaItensDropEstados,
@@ -131,14 +133,15 @@ class AnunciosState extends State<Anuncios> {
                 Container(
                   color: Colors.grey[200],
                   width: 2,
-                  height: 60,
+                  height: 50,
                 ),
                 Expanded(
                   child: DropdownButtonHideUnderline(
                     child: Center(
                       child: DropdownButton(
                         iconEnabledColor: Color(0xff9c27b0),
-                        hint: const Text('Categorias', style: TextStyle(color: Color(0xff9c27b0))),
+                        hint: const Text('Categorias',
+                            style: TextStyle(color: Color(0xff9c27b0))),
                         style: TextStyle(fontSize: 22, color: Colors.black),
                         value: _itemSelecionadoCategoria,
                         items: _listaItensDropCategorias,
@@ -161,7 +164,6 @@ class AnunciosState extends State<Anuncios> {
                   case ConnectionState.waiting:
                   case ConnectionState.active:
                   case ConnectionState.done:
-
                     QuerySnapshot querySnapshot = snapshot.data;
 
                     if (querySnapshot.docs.length == 0) {
@@ -169,19 +171,22 @@ class AnunciosState extends State<Anuncios> {
                         padding: EdgeInsets.all(25),
                         child: Text(
                           'Nenhum anuncio! :(',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       );
                     }
-                    ;
 
                     return Expanded(
                       child: ListView.builder(
                           itemCount: querySnapshot.docs.length,
                           itemBuilder: (_, indice) {
-                            List<DocumentSnapshot> anuncios = querySnapshot.docs.toList();
-                            DocumentSnapshot documentSnapshot = anuncios[indice];
-                            Anuncio anuncio = Anuncio.fromDocumentSnapshot(documentSnapshot);
+                            List<DocumentSnapshot> anuncios =
+                                querySnapshot.docs.toList();
+                            DocumentSnapshot documentSnapshot =
+                                anuncios[indice];
+                            Anuncio anuncio = Anuncio.fromDocumentSnapshot(
+                                documentSnapshot);
 
                             return ItemAnuncio(
                               anuncio: anuncio,
