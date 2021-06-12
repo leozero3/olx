@@ -73,6 +73,26 @@ class AnunciosState extends State<Anuncios> {
     });
   }
 
+  Future<Stream<QuerySnapshot>> _filtrarAnuncios() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    Query query = db.collection('anuncios');
+
+    if (_itemSelecionadoEstado != null) {
+      query = query.where('estado', isEqualTo: _itemSelecionadoEstado);
+    }
+
+    if (_itemSelecionadoCategoria != null) {
+      query = query.where('estado', isEqualTo: _itemSelecionadoCategoria);
+    }
+
+    Stream<QuerySnapshot> stream = query.snapshots();
+
+    stream.listen((dados) {
+      _controller.add(dados);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -106,8 +126,7 @@ class AnunciosState extends State<Anuncios> {
       ),
       body: Container(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+
           children: [
             Row(
               children: [
@@ -124,6 +143,7 @@ class AnunciosState extends State<Anuncios> {
                         onChanged: (estado) {
                           setState(() {
                             _itemSelecionadoEstado = estado;
+                            _filtrarAnuncios();
                           });
                         },
                       ),
@@ -148,6 +168,7 @@ class AnunciosState extends State<Anuncios> {
                         onChanged: (categoria) {
                           setState(() {
                             _itemSelecionadoCategoria = categoria;
+                            _filtrarAnuncios();
                           });
                         },
                       ),
@@ -164,9 +185,11 @@ class AnunciosState extends State<Anuncios> {
                   case ConnectionState.waiting:
                   case ConnectionState.active:
                   case ConnectionState.done:
+                  if(snapshot.data == null) return CircularProgressIndicator();
                     QuerySnapshot querySnapshot = snapshot.data;
 
                     if (querySnapshot.docs.length == 0) {
+
                       return Container(
                         padding: EdgeInsets.all(25),
                         child: Text(
