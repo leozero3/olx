@@ -10,10 +10,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final TextEditingController _controllerEmail =
-      TextEditingController(text: 'leo@leo.com');
-  final TextEditingController _controllerSenha =
-      TextEditingController(text: 'leoleo');
+  final TextEditingController _controllerEmail = TextEditingController(text: 'leo@leo.com');
+  final TextEditingController _controllerSenha = TextEditingController(text: 'leoleo');
 
   bool _cadastrar = false;
   String _mensagemErro = '';
@@ -101,7 +99,6 @@ class _LoginState extends State<Login> {
                 hint: 'Senha',
                 obscure: true,
                 type: TextInputType.text,
-                maxLines: 1,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -128,14 +125,18 @@ class _LoginState extends State<Login> {
                   _validarCampos();
                 },
               ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+                child: Text('Ir para anuncios'),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Text(
                   _mensagemErro,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red),
+                  style:
+                      const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
                 ),
               ),
             ],
